@@ -1,8 +1,4 @@
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-import plotly.express as px
-import plotly.graph_objects as go
 
 df = pd.read_csv('C:/Users/hp/Downloads/weekly_market_2017_2022.tsv', sep='\t')
 
@@ -39,6 +35,13 @@ df1.drop(["period_begin","period_end"],axis=1,inplace=True)
 cols=df1.columns[df1.isnull().any()]
 for col in cols:
   df1[col].fillna(df1[col].mean(),inplace=True)
+
+df1["county"]=[x.split(',')[0] for x in df1["region_name"]]
+for i in range(len(df1)):
+  l=df1.iloc[i]['county'].split(' ')
+  if len(l)>1:
+    df1.at[i,'county']=l[0]
+  df1.at[i,'county']=df1.at[i,'county'].strip()
 
 df1["state"]=[x.split(',')[-1] for x in df1["region_name"]]
 for i in range(len(df1)):
